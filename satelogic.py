@@ -3,11 +3,10 @@ import geopandas as gpd
 import geojson
 
 
-def create_gdf(sample_data):
-    ''' 
-    THis function is used to loop through the geojson file and create a dataframe of each object in the geojson
-    '''
+""" THis function is used to loop through the geojson file and create a dataframe of each object in the geojson """
 
+
+def create_gdf(sample_data):
     tmp = []
     polygons = []
     line = []
@@ -43,32 +42,29 @@ def create_gdf(sample_data):
 
 
 def process_data(thin_cld, thick_cld):
-    '''a function to remove the overlays between the thick cloud and the thin cloud
-	'''
+    """a function to remove the overlays between the thick cloud and the thin cloud """
     difference = gpd.overlay(thin_cld, thick_cld, how='difference')
 
     return difference
 
 
 def new_dataframe(gdf, thick_cld, difference):
-    ''' the function is used to create the final dataframe with the cleaned data
-    '''
+    """ the function is used to create the final dataframe with the cleaned data """
 
-    # creating a new datafrme of thick cloud and the cleaned thin cloud
+    # creating a new dataframe of thick cloud and the cleaned thin cloud
     new_cloud = difference.append(thick_cld)
 
-    # droping rows that have overlays
+    # dropping rows that have overlays
     gdf_copy = gdf.drop([13, 14, 15, 16, 17])
 
-    # adding the new cleaned cloud to the origibal data frame
+    # adding the new cleaned cloud to the original data frame
     new_gdf = gdf_copy.append(new_cloud)
 
     return new_gdf
 
 
 def main(data):
-    ''' the function is used to call the main functions and display the final result on a canvas
-    '''
+    """ the function is used to call the main functions and display the final result on a canvas """
     # creating the initial dataframe
     gdf = create_gdf(data)
 
